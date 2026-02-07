@@ -1,22 +1,28 @@
-from core.templates import render_text
-from core.profiles import get_profile_by_name
 from core.backup import create_backup
+from core.profiles import get_profile_by_name
 
-def post_to_platform(platform, profile, text):
-    print(f"[INFO] Poste auf {platform} als {profile['display_name']}:")
-    print(text)
-    print("--------------------------------------------------")
-
-def run_posting(profile_name, platforms):
+def run_posting(profile_name, platforms, text):
     profile = get_profile_by_name(profile_name)
+
     if not profile:
-        print("Profil nicht gefunden.")
+        print("Fehler: Profil nicht gefunden.")
         return
 
-    text = render_text()
+    print("\n====================================")
+    print("         POSTING STARTET")
+    print("====================================")
+    print(f"Profil: {profile_name}")
+    print(f"Plattformen: {', '.join(platforms)}")
+    print("------------------------------------")
+    print("TEXT:")
+    print(text)
+    print("------------------------------------")
 
+    # Hier wird später die echte API-Logik eingebaut
     for platform in platforms:
-        post_to_platform(platform, profile, text)
+        print(f"[OK] Posting vorbereitet für: {platform}")
 
     create_backup()
-    print("Backup erstellt.")
+    print("\nBackup wurde erstellt.")
+    print("Posting-Vorgang abgeschlossen.")
+    print("====================================\n")
