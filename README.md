@@ -169,5 +169,5 @@ Privates Projekt. Nicht zur Weitergabe bestimmt.
 ---
 
 ## 👤 Autor
-Christian (deranderechris)
+(deranderechris)
 
