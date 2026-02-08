@@ -1,0 +1,6 @@
+{
+  "language": "de",
+  "rotation_mode": "random",
+  "backup_on_change": true,
+  "backup_keep_versions": 10
+}
