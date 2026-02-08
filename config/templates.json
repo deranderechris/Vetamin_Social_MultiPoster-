@@ -1,0 +1,14 @@
+{
+  "templates": [
+    "Heute ist {datum}: Neuigkeiten von Vetamin.com",
+    "Update {datum}: Vetamin hilft dir, mehr Umsatz zu machen.",
+    "Stand {datum} um {uhrzeit}: Wir suchen neue Partner für Vetamin.",
+    "Frische Infos ({datum}): Vetamin.com wächst weiter.",
+    "Status {datum}: Jetzt Vertriebspartner werden – {link}"
+  ],
+  "placeholders": {
+    "datum_format": "%d.%m.%Y",
+    "uhrzeit_format": "%H:%M"
+  },
+  "default_link": "https://vetamin.com"
+}
