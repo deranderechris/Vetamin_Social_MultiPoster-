@@ -1,8 +1,14 @@
 import json
 import os
 from core.backup import create_backup
+from core.platform_router import get_platform_handler
 
 API_FILE = "config/api_keys.json"
+
+
+# ---------------------------------------------------------
+# API-KEY HANDLING
+# ---------------------------------------------------------
 
 def load_api_keys():
     if not os.path.exists(API_FILE):
@@ -10,15 +16,18 @@ def load_api_keys():
     with open(API_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
 def save_api_keys(keys):
     with open(API_FILE, "w", encoding="utf-8") as f:
         json.dump(keys, f, indent=4, ensure_ascii=False)
 
+
 def ensure_api_key(platform):
     keys = load_api_keys()
 
+    # Wenn kein Key vorhanden → User nach Key fragen
     if platform not in keys or keys[platform].strip() == "":
-        print(f"\n⚠️  Kein API‑Key für {platform} gefunden.")
+        print(f"\nKein API‑Key für {platform} gefunden.")
         new_key = input(f"Bitte API‑Key für {platform} eingeben:\n→ ").strip()
 
         keys[platform] = new_key
@@ -27,21 +36,10 @@ def ensure_api_key(platform):
 
     return keys[platform]
 
-def post_to_platform(platform, profile, text):
-    api_key = ensure_api_key(platform)
 
-    print("\n====================================")
-    print(f"POSTING AUF: {platform.upper()}")
-    print("------------------------------------")
-    print(f"Profil: {profile['display_name']}")
-    print(f"API‑Key: {api_key[:4]}**** (versteckt)")
-    print("TEXT:")
-    print(text)
-    print("====================================\n")
-
-    # HIER wird später die echte API‑Anfrage eingebaut
-    # Beispiel:
-    # requests.post("https://api.facebook.com/...", headers={"Authorization": api_key}, data={...})
+# ---------------------------------------------------------
+# POSTING ENGINE
+# ---------------------------------------------------------
 
 def run_posting(profile_name, platforms, text):
     profile = {"display_name": profile_name}
@@ -51,9 +49,20 @@ def run_posting(profile_name, platforms, text):
     print("====================================")
 
     for platform in platforms:
-        post_to_platform(platform, profile, text)
+        handler = get_platform_handler(platform)
 
+        if handler is None:
+            print(f"Unbekannte Plattform: {platform}")
+            continue
+
+        # API-Key sicherstellen
+        ensure_api_key(platform)
+
+        # Connector aufrufen
+        handler(profile, text)
+
+    # Backup nach jedem Posting
     create_backup()
-    print("Backup erstellt.")
+    print("\nBackup erstellt.")
     print("Posting abgeschlossen.")
     print("====================================\n")
